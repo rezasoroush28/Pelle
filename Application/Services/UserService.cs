@@ -24,6 +24,28 @@ namespace Application.Services
             return JwtHelper.GenerateToken(username);
         }
 
+        public async Task<bool> UpdateUserAsync(string currentUsername , string targetUsername , string newUsername , string newPassword)
+        {
+            var Users = await _userRepository.GetAllAsync();
+
+            var targetUser = Users.FirstOrDefault(u => u.Username == targetUsername);
+            if (targetUser != null)
+            {
+                return false;
+            }
+
+            if(currentUsername != "User2" && targetUsername != currentUsername)
+            {
+                return false;
+            }
+
+            targetUser.Username = newUsername;
+            targetUser.Password = newPassword;
+
+            await _userRepository.UpdateAsync(targetUser);
+
+            return true;
+        }
 
     }
 }
