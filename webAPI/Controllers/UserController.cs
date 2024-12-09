@@ -16,7 +16,7 @@ namespace webAPI.Controllers
         {
             _userService = userService;
         }
-
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest userLoginRequest)
         {
@@ -29,13 +29,14 @@ namespace webAPI.Controllers
             return Ok(new {Token = token});
         }
 
+        
         [HttpPost("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest updateUserRequest)
         {
             var logedUser = User.Identity.Name;
 
             var isDone = await _userService.UpdateUserAsync(logedUser, updateUserRequest.TargetUserName, updateUserRequest.NewUsename, updateUserRequest.NewPassword);
-            if(isDone)
+            if(!isDone)
             {
                 return Forbid("the user is not found or update is not Authorized");
             }

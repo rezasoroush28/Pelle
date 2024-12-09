@@ -16,8 +16,8 @@ namespace Infrastructure.Data
 
             // Seed data, configurations, etc.
             modelBuilder.Entity<User>().HasData(
-                new User { Id = 1, Username = "user1", Password = "password1" },
-                new User { Id = 2, Username = "user2", Password = "password2" }
+                new User { Id = 1, Username = "user1", Password = "1234" },
+                new User { Id = 2, Username = "user2", Password = "1234" }
             );
         }
     }
