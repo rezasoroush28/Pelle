@@ -80,9 +80,14 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Dependency Injection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("webAPI")));
+
+//the following code is for postgreSql
+
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("webAPI")));
+
 
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 
@@ -97,16 +102,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Enable Swagger in Development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Middleware Pipeline
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Important: Ensure this comes before Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
