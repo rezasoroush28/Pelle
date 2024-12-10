@@ -34,8 +34,9 @@ namespace webAPI.Controllers
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest updateUserRequest)
         {
             var logedUser = User.Identity.Name;
-
-            var isDone = await _userService.UpdateUserAsync(logedUser, updateUserRequest.TargetUserName, updateUserRequest.NewUsename, updateUserRequest.NewPassword);
+            var  targetUsername = string.IsNullOrEmpty(updateUserRequest.TargetUserName) ? logedUser : updateUserRequest.TargetUserName;
+            
+            var isDone = await _userService.UpdateUserAsync(logedUser, targetUsername, updateUserRequest.NewUsename, updateUserRequest.NewPassword);
             if(!isDone)
             {
                 return Forbid("the user is not found or update is not Authorized");
@@ -53,8 +54,8 @@ namespace webAPI.Controllers
 
         public class UpdateUserRequest
         {
-            public string TargetUserName { get; set; }
-            public string NewUsename { get; set; }
+            public string? TargetUserName { get; set; }
+            public string? NewUsename { get; set; }
             public string NewPassword { get; set; }
         }
        

@@ -14,7 +14,7 @@ namespace Application.Services
             _jwtHelper = jwtHelper;
         }
 
-        public async Task<string>  LoginAsync(string username, string password)
+        public async Task<string> LoginAsync(string username, string password)
         {
             var users = await _userRepository.GetAllAsync();
             var foundUser = users.FirstOrDefault(u => (u.Username == username && u.Password == password));
@@ -26,7 +26,7 @@ namespace Application.Services
             return _jwtHelper.GenerateToken(username);
         }
 
-        public async Task<bool> UpdateUserAsync(string currentUsername , string targetUsername , string newUsername , string newPassword)
+        public async Task<bool> UpdateUserAsync(string currentUsername, string targetUsername, string newUsername, string newPassword)
         {
             var Users = await _userRepository.GetAllAsync();
 
@@ -36,12 +36,16 @@ namespace Application.Services
                 return false;
             }
 
-            if(currentUsername != "user2" && targetUsername != currentUsername)
+            if (currentUsername != "user1" && targetUsername != currentUsername)
             {
                 return false;
             }
 
-            targetUser.Username = newUsername;
+            if (newUsername != "")
+            {
+                targetUser.Username = newUsername;
+            }
+
             targetUser.Password = newPassword;
 
             await _userRepository.UpdateAsync(targetUser);
